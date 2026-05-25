@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import csv
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
@@ -35,8 +36,18 @@ def home():
             previous_marks
         ]])
 
-        prediction = round(result[0], 2)
-        prediction = max(0, min(100, prediction))
+        prediction = round(max(0, min(100, result[0])), 2)
+
+    with open("user_data.csv", "a", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow([
+            study_hours,
+            attendance,
+            sleep_hours,
+            previous_marks,
+            prediction
+        ])
 
     return render_template(
         "index.html",

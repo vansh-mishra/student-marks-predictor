@@ -15,6 +15,7 @@ The project predicts student marks based on:
 - Charts using Chart.js
 - Flask backend
 - Real-time prediction
+- Saved-user inputs
 
 ## 🛠️ Technologies Used
 
