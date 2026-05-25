@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Marks Predictor</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            padding:20px;
+        }
+
+        .container{
+            width:100%;
+            max-width:700px;
+            background:#fff;
+            padding:35px;
+            border-radius:20px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .container h1{
+            text-align:center;
+            margin-bottom:25px;
+            color:#333;
+            font-size:32px;
+        }
+
+        .form-group{
+            margin-bottom:18px;
+        }
+
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            color:#444;
+            font-weight:600;
+        }
+
+        .form-group input{
+            width:100%;
+            padding:14px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            font-size:16px;
+            transition:0.3s;
+        }
+
+        .form-group input:focus{
+            border-color:#4facfe;
+            outline:none;
+            box-shadow:0 0 8px rgba(79,172,254,0.5);
+        }
+
+        .predict-btn{
+            width:100%;
+            padding:14px;
+            border:none;
+            border-radius:10px;
+            background:#4facfe;
+            color:white;
+            font-size:18px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .predict-btn:hover{
+            background:#2196f3;
+            transform:translateY(-2px);
+        }
+
+        .result{
+            margin-top:25px;
+            padding:15px;
+            background:#e8f5e9;
+            border-left:5px solid #4caf50;
+            border-radius:10px;
+            text-align:center;
+        }
+
+        .result h2{
+            color:#2e7d32;
+            font-size:24px;
+        }
+
+        .chart-container{
+            margin-top:30px;
+        }
+
+        @media (max-width: 500px){
+
+            .container{
+                padding:25px;
+            }
+
+            .container h1{
+                font-size:26px;
+            }
+
+            .form-group input{
+                padding:12px;
+            }
+
+            .predict-btn{
+                font-size:16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>🎓 Student Marks Predictor</h1>
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label>Study Hours</label>
+                <input type="number" step="any" name="study_hours" placeholder="Enter study hours" required>
+            </div>
+
+            <div class="form-group">
+                <label>Attendance (%)</label>
+                <input type="number" step="any" name="attendance" placeholder="Enter attendance" required>
+            </div>
+
+            <div class="form-group">
+                <label>Sleep Hours</label>
+                <input type="number" step="any" name="sleep_hours" placeholder="Enter sleep hours" required>
+            </div>
+
+            <div class="form-group">
+                <label>Previous Marks</label>
+                <input type="number" step="any" name="previous_marks" placeholder="Enter previous marks" required>
+            </div>
+
+            <button type="submit" class="predict-btn">
+                Predict Marks
+            </button>
+
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <h2>Predicted Marks: {{ prediction }}</h2>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="marksChart"></canvas>
+        </div>
+
+        <script>
+            const ctx = document.getElementById('marksChart');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Study Hours',
+                        'Attendance',
+                        'Sleep Hours',
+                        'Previous Marks',
+                        'Predicted Marks'
+                    ],
+                    datasets: [{
+                        label: 'Student Analysis',
+                        data: [
+                            {{ study_hours }},
+                            {{ attendance }},
+                            {{ sleep_hours }},
+                            {{ previous_marks }},
+                            {{ prediction }}
+                        ],
+                        backgroundColor: [
+                            '#42a5f5',
+                            '#66bb6a',
+                            '#ffa726',
+                            '#ab47bc',
+                            '#ef5350'
+                        ],
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        </script>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
