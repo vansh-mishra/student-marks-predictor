@@ -38,16 +38,6 @@ def home():
 
         prediction = round(max(0, min(100, result[0])), 2)
 
-        with open("user_data.csv", "a", newline="") as file:
-            writer = csv.writer(file)
-
-            writer.writerow([
-                study_hours,
-                attendance,
-                sleep_hours,
-                previous_marks,
-                prediction
-            ])
 
     return render_template(
         "index.html",
